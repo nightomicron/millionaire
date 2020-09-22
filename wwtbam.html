@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>WWTBAM</title>
+		<link href="css/hud.css" rel="stylesheet" type="text/css" media="all">
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				var correct = "b"; /*correct answer*/
+				var chosen = "none"; /*chosen answer*/
+				var interact = false; /*if the player can interact with the icons*/
+				
+				window.onload = function() {
+				
+					$('#start').animate({"opacity": "show"},200); /*when the game loaded it places the start button*/
+					
+					/*starts the game*/
+					$('#start').on('click',function(){
+						
+						/*resets the game*/
+						letsplay1_5.currentTime = 0;
+						celebrity.currentTime = 0;
+						final_answer.currentTime = 0;
+						win_6_7.currentTime = 0;
+						lose_6_7.currentTime = 0;
+						
+						letsplay1_5.pause();
+						celebrity.pause();
+						final_answer.pause();
+						win_6_7.pause();
+						lose_6_7.pause();
+						
+						$('#a_hud').attr("src", "hud/hud_default.png");
+						$('#b_hud').attr("src", "hud/hud_default.png");
+						$('#c_hud').attr("src", "hud/hud_default.png");
+						$('#d_hud').attr("src", "hud/hud_default.png");
+						
+						$('#question_text').animate({"opacity": "hide"},0);
+						$('.answer').animate({"opacity": "hide"},0);
+						
+						/*starts the game animation*/
+						letsplay1_5.play();
+						$('#start').animate({"opacity": "hide"},200);
+						$('#question_text').delay(5000).animate({"opacity": "show"},500);
+						setTimeout(function(){letsplay1_5.pause();}, 10000)
+						setTimeout(function(){letsplay1_5.currentTime = 0;}, 10001)
+						setTimeout(function(){celebrity.play();}, 10000)
+						$('.answer').delay(10000).animate({"opacity": "show"},500);
+						setTimeout(function(){interact = true;}, 10000)
+					});
+					
+					/*function if the A answer was clicked on*/
+					$('#a_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#a_hud').attr("src", "hud/hud_answer.png");
+							celebrity.pause();
+							final_answer.play();
+							chosen = "a";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#a_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									$('#b_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									lose_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the B answer was clicked on*/
+					$('#b_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#b_hud').attr("src", "hud/hud_answer.png");
+							celebrity.pause();
+							final_answer.play();
+							chosen = "b";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#b_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									$('#b_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									lose_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the C answer was clicked on*/
+					$('#c_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#c_hud').attr("src", "hud/hud_answer.png");
+							celebrity.pause();
+							final_answer.play();
+							chosen = "c";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#c_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									$('#b_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									lose_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the D answer was clicked on*/
+					$('#d_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#d_hud').attr("src", "hud/hud_answer.png");
+							celebrity.pause();
+							final_answer.play();
+							chosen = "d";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#d_hud').attr("src", "hud/hud_correct.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+								}else{
+									$('#b_hud').attr("src", "hud/hud_correct.png");
+									final_answer.pause();
+									final_answer.currentTime = 0;
+									lose_6_7.play();
+								}
+							
+							}, 3000)
+						}
+					});
+				}
+			});
+		
+		</script>
+	</head>
+
+	<body>
+		<div id="start">Start</div>
+		
+		<img id="question_hud" src="hud/hud_default.png" width="950px" height="150px">
+		<img id="a_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="b_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="c_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="d_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<div id="question_text">Which of the following people was the first president of the United States?</div>
+		<div id="a_text" class="answer">A: Thomas Jefferson</div>
+		<div id="b_text" class="answer">B: George Washington</div>
+		<div id="c_text" class="answer">C: John Tyler</div>
+		<div id="d_text" class="answer">D: Ronald Reagan</div>
+		
+		<audio id="letsplay1_5" src="music/letsplay1_5.mp3"></audio>
+		<audio loop id="celebrity" src="music/q_celebrity.mp3"></audio>
+		<audio id="final_answer" src="music/final_answer.mp3"></audio>
+		<audio id="win_6_7" src="music/win_6_7.mp3"></audio>
+		<audio id="lose_6_7" src="music/lose_6_7.mp3"></audio>
+	</body>
+
+</html>
