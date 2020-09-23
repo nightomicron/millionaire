@@ -10,6 +10,8 @@
 				var correct = "b"; /*correct answer*/
 				var chosen = "none"; /*chosen answer*/
 				var interact = false; /*if the player can interact with the icons*/
+				var interact_life = false; /*if the player can interact with the lifelines*/
+				var doubledip = false; /*if the double dip lifeline is in use*/
 				
 				window.onload = function() {
 				
@@ -19,17 +21,27 @@
 					$('#start').on('click',function(){
 						
 						/*resets the game*/
+						interact = false;
+						interact_life = false;
+						doubledip = false;
+						
 						letsplay1_5.currentTime = 0;
 						celebrity.currentTime = 0;
 						final_answer.currentTime = 0;
 						win_6_7.currentTime = 0;
 						lose_6_7.currentTime = 0;
+						dd.currentTime = 0;
+						dd_fail.currentTime = 0;
+						dd_answer.currentTime = 0;
 						
 						letsplay1_5.pause();
 						celebrity.pause();
 						final_answer.pause();
 						win_6_7.pause();
 						lose_6_7.pause();
+						dd.pause();
+						dd_fail.pause();
+						dd_answer.pause();
 						
 						$('#a_hud').attr("src", "hud/hud_default.png");
 						$('#b_hud').attr("src", "hud/hud_default.png");
@@ -38,6 +50,8 @@
 						
 						$('#question_text').animate({"opacity": "hide"},0);
 						$('.answer').animate({"opacity": "hide"},0);
+						$('#life_dd_using').animate({"opacity": "hide"},0);	
+						$('#life_dd').animate({"opacity": "show"},0);
 						
 						/*starts the game animation*/
 						letsplay1_5.play();
@@ -47,7 +61,7 @@
 						setTimeout(function(){letsplay1_5.currentTime = 0;}, 10001)
 						setTimeout(function(){celebrity.play();}, 10000)
 						$('.answer').delay(10000).animate({"opacity": "show"},500);
-						setTimeout(function(){interact = true;}, 10000)
+						setTimeout(function(){interact = true; interact_life = true;}, 10000)
 					});
 					
 					/*function if the A answer was clicked on*/
@@ -55,23 +69,52 @@
 						if(interact == true){
 							interact = false;
 							$('#a_hud').attr("src", "hud/hud_answer.png");
-							celebrity.pause();
-							final_answer.play();
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
 							chosen = "a";
 							setTimeout(function(){
 							
 								if(correct == chosen){
 									$('#a_hud').attr("src", "hud/hud_good.png");
 									final_answer.pause();
+									dd_answer.pause();
 									final_answer.currentTime = 0;
 									win_6_7.play();
+									$('#life_dd_using').animate({"opacity": "hide"},500);	
 									$('#start').animate({"opacity": "show"},200);
 								}else{
-									$('#b_hud').attr("src", "hud/hud_good.png");
-									final_answer.pause();
-									final_answer.currentTime = 0;
-									lose_6_7.play();
-									$('#start').animate({"opacity": "show"},200);
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#a_text').animate({"opacity": "hide"},1000);
+										$('#a_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											interact_life = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+										
+									}
+									
 								}
 							
 							}, 3000)
@@ -83,23 +126,51 @@
 						if(interact == true){
 							interact = false;
 							$('#b_hud').attr("src", "hud/hud_answer.png");
-							celebrity.pause();
-							final_answer.play();
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
 							chosen = "b";
 							setTimeout(function(){
 							
 								if(correct == chosen){
 									$('#b_hud').attr("src", "hud/hud_good.png");
 									final_answer.pause();
+									dd_answer.pause();
 									final_answer.currentTime = 0;
+									$('#life_dd_using').animate({"opacity": "hide"},500);	
 									win_6_7.play();
 									$('#start').animate({"opacity": "show"},200);
 								}else{
-									$('#b_hud').attr("src", "hud/hud_good.png");
-									final_answer.pause();
-									final_answer.currentTime = 0;
-									lose_6_7.play();
-									$('#start').animate({"opacity": "show"},200);
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#b_text').animate({"opacity": "hide"},1000);
+										$('#b_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											interact_life = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
 								}
 							
 							}, 3000)
@@ -111,23 +182,51 @@
 						if(interact == true){
 							interact = false;
 							$('#c_hud').attr("src", "hud/hud_answer.png");
-							celebrity.pause();
-							final_answer.play();
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
 							chosen = "c";
 							setTimeout(function(){
 							
 								if(correct == chosen){
 									$('#c_hud').attr("src", "hud/hud_good.png");
 									final_answer.pause();
+									dd_answer.pause();
 									final_answer.currentTime = 0;
+									$('#life_dd_using').animate({"opacity": "hide"},500);
 									win_6_7.play();
 									$('#start').animate({"opacity": "show"},200);
 								}else{
-									$('#b_hud').attr("src", "hud/hud_good.png");
-									final_answer.pause();
-									final_answer.currentTime = 0;
-									lose_6_7.play();
-									$('#start').animate({"opacity": "show"},200);
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#c_text').animate({"opacity": "hide"},1000);
+										$('#c_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											interact_life = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
 								}
 							
 							}, 3000)
@@ -139,26 +238,72 @@
 						if(interact == true){
 							interact = false;
 							$('#d_hud').attr("src", "hud/hud_answer.png");
-							celebrity.pause();
-							final_answer.play();
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
 							chosen = "d";
 							setTimeout(function(){
 							
 								if(correct == chosen){
-									$('#d_hud').attr("src", "hud/hud_correct.png");
+									$('#d_hud').attr("src", "hud/hud_good.png");
 									final_answer.pause();
+									dd_answer.pause();
 									final_answer.currentTime = 0;
 									win_6_7.play();
+									$('#life_dd_using').animate({"opacity": "hide"},500);
+									$('#start').animate({"opacity": "show"},200);
 								}else{
-									$('#b_hud').attr("src", "hud/hud_correct.png");
-									final_answer.pause();
-									final_answer.currentTime = 0;
-									lose_6_7.play();
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#d_text').animate({"opacity": "hide"},1000);
+										$('#d_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											interact_life = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
 								}
 							
 							}, 3000)
 						}
 					});
+					
+					/*Lifeline functions*/
+					/*Double Dip*/
+					$('#life_dd').on('click',function(){
+						if(interact == true && interact_life == true){
+							celebrity.pause();
+							dd.play();
+							$('#life_dd').animate({"opacity": "hide"},200);
+							$('#life_dd_using').animate({"opacity": "show"},200);
+							doubledip = true;
+							interact_life = false;
+						}
+					});
+					
+					/*Phone a Friend*/
+					
 				}
 			});
 		
@@ -179,11 +324,21 @@
 		<div id="c_text" class="answer">C: John Tyler</div>
 		<div id="d_text" class="answer">D: Ronald Reagan</div>
 		
+		<img id="life_phone" class="lifeline" src="hud/lifeline_phone.png" width="100px" height="50px">
+		<img id="life_audience" class="lifeline" src="hud/lifeline_audience.png" width="100px" height="50px">
+		<img id="life_dd" class="lifeline" src="hud/lifeline_dd.png" width="100px" height="50px">
+		<img id="life_dd_using" src="hud/lifeline_dd.png" width="100px" height="50px">
+		<img id="life_phone_using" src="hud/lifeline_standard.png" width="200px" height="200px">
+		<div id="phone_counter">30</div>
+		
 		<audio id="letsplay1_5" src="music/letsplay1_5.mp3"></audio>
 		<audio loop id="celebrity" src="music/q_celebrity.mp3"></audio>
 		<audio id="final_answer" src="music/final_answer.mp3"></audio>
 		<audio id="win_6_7" src="music/win_6_7.mp3"></audio>
 		<audio id="lose_6_7" src="music/lose_6_7.mp3"></audio>
+		<audio id="dd" src="music/dd.mp3"></audio>
+		<audio id="dd_fail" src="music/dd_fail.mp3"></audio>
+		<audio id="dd_answer" src="music/dd_answer.mp3"></audio>
 	</body>
 
 </html>

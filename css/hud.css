@@ -120,3 +120,65 @@ body{
 	opacity: 1;
 	display: none;
 }
+
+/*hud text ending*/
+
+/*lifelines beginning*/
+
+#life_phone{
+	position: absolute;
+	top: 250px;
+	left: 300px;
+}
+
+#life_audience{
+	position: absolute;
+	top: 250px;
+	left: 420px;
+}
+
+#life_dd{
+	position: absolute;
+	top: 250px;
+	left: 540px;
+}
+
+#life_dd_using{
+	position: absolute;
+	top: 470px;
+	left: 425px;
+	opacity: 1;
+	display: none;
+}
+
+#life_phone_using{
+	position: absolute;
+	top: 50px;
+	left: 373px;
+	opacity: 1;
+	display: none;
+}
+
+#phone_counter{
+	position: absolute;
+	top: 88px;
+	left: 415px;
+	font-size: 100px;
+	color: white;
+	opacity: 1;
+	display: none;
+}
+
+.lifeline:hover{
+	opacity: 0.6;
+}
+
+.lifeline{
+	opacity: 1;
+	transition: opacity 0.5s;
+}
+
+
+
+
+
