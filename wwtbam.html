@@ -33,6 +33,7 @@
 						dd.currentTime = 0;
 						dd_fail.currentTime = 0;
 						dd_answer.currentTime = 0;
+						phone.currentTime = 0;
 						
 						letsplay1_5.pause();
 						celebrity.pause();
@@ -42,23 +43,26 @@
 						dd.pause();
 						dd_fail.pause();
 						dd_answer.pause();
+						phone.pause();
 						
 						$('#a_hud').attr("src", "hud/hud_default.png");
 						$('#b_hud').attr("src", "hud/hud_default.png");
 						$('#c_hud').attr("src", "hud/hud_default.png");
 						$('#d_hud').attr("src", "hud/hud_default.png");
+						$('#phone_counter').text("30");
 						
 						$('#question_text').animate({"opacity": "hide"},0);
 						$('.answer').animate({"opacity": "hide"},0);
 						$('#life_dd_using').animate({"opacity": "hide"},0);	
 						$('#life_dd').animate({"opacity": "show"},0);
+						$('#life_phone').animate({"opacity": "show"},0);
 						
 						/*starts the game animation*/
 						letsplay1_5.play();
 						$('#start').animate({"opacity": "hide"},200);
 						$('#question_text').delay(5000).animate({"opacity": "show"},500);
-						setTimeout(function(){letsplay1_5.pause();}, 10000)
-						setTimeout(function(){letsplay1_5.currentTime = 0;}, 10001)
+						setTimeout(function(){letsplay1_5.pause();}, 10200)
+						setTimeout(function(){letsplay1_5.currentTime = 0;}, 10201)
 						setTimeout(function(){celebrity.play();}, 10000)
 						$('.answer').delay(10000).animate({"opacity": "show"},500);
 						setTimeout(function(){interact = true; interact_life = true;}, 10000)
@@ -109,7 +113,6 @@
 											celebrity.play();
 											doubledip = false;
 											interact = true;
-											interact_life = true;
 											$('#life_dd_using').animate({"opacity": "hide"},500);
 										}, 3000)
 										
@@ -166,7 +169,6 @@
 											celebrity.play();
 											doubledip = false;
 											interact = true;
-											interact_life = true;
 											$('#life_dd_using').animate({"opacity": "hide"},500);
 										}, 3000)
 									}
@@ -222,7 +224,6 @@
 											celebrity.play();
 											doubledip = false;
 											interact = true;
-											interact_life = true;
 											$('#life_dd_using').animate({"opacity": "hide"},500);
 										}, 3000)
 									}
@@ -278,7 +279,6 @@
 											celebrity.play();
 											doubledip = false;
 											interact = true;
-											interact_life = true;
 											$('#life_dd_using').animate({"opacity": "hide"},500);
 										}, 3000)
 									}
@@ -295,6 +295,7 @@
 						if(interact == true && interact_life == true){
 							celebrity.pause();
 							dd.play();
+							
 							$('#life_dd').animate({"opacity": "hide"},200);
 							$('#life_dd_using').animate({"opacity": "show"},200);
 							doubledip = true;
@@ -303,7 +304,48 @@
 					});
 					
 					/*Phone a Friend*/
-					
+					$('#life_phone').on('click',function(){
+						if(interact == true && interact_life == true){
+							var call_time = 29;
+							var call_time_text = "";
+							celebrity.pause();
+							phone.play();
+							interact = false;
+							$('#life_phone').animate({"opacity": "hide"},200);
+							$('#life_phone_using').animate({"opacity": "show"},200);
+							$('#phone_counter').animate({"opacity": "show"},200);
+							var ticking = setInterval(function(){
+									call_time_text = call_time.toString();
+									$('#phone_counter').text(call_time_text);
+									call_time--;
+									if(call_time == -1){
+										cut_call();
+									}
+							}, 1000);
+						}
+						
+						/*manual phone interruption*/
+						$('#life_phone_using').on('click',function(){
+							cut_call();
+						});
+						$('#phone_counter').on('click',function(){
+							cut_call();
+						});
+						
+						/*terminate phone a friend*/
+						function cut_call(){
+							clearInterval(ticking);
+							$('#phone_counter').text(correct);
+							phone.currentTime = 30;
+							setTimeout(function(){
+								phone.pause();
+								$('#life_phone_using').animate({"opacity": "hide"},200);
+								$('#phone_counter').animate({"opacity": "hide"},200);
+								celebrity.play();
+								interact = true;
+							}, 3000)
+						}
+					});
 				}
 			});
 		
@@ -339,6 +381,7 @@
 		<audio id="dd" src="music/dd.mp3"></audio>
 		<audio id="dd_fail" src="music/dd_fail.mp3"></audio>
 		<audio id="dd_answer" src="music/dd_answer.mp3"></audio>
+		<audio id="phone" src="music/Phone.mp3"></audio>
 	</body>
 
 </html>
