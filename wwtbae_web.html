@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Who Wants To Be An Egghead</title>
+		<link href="css/hud.css" rel="stylesheet" type="text/css" media="all">
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				var correct = "b"; /*correct answer*/
+				var chosen = "none"; /*chosen answer*/
+				var interact = false; /*if the player can interact with the icons*/
+				var interact_life = false; /*if the player can interact with the lifelines*/
+				var doubledip = false; /*if the double dip lifeline is in use*/
+				
+				window.onload = function() {
+				
+					$('#start').animate({"opacity": "show"},200); /*when the game loaded it places the start button*/
+					
+					/*starts the game*/
+					$('#start').on('click',function(){
+						
+						/*resets the game*/
+						interact = false;
+						interact_life = false;
+						doubledip = false;
+						
+						letsplay1_5.currentTime = 0;
+						celebrity.currentTime = 0;
+						final_answer.currentTime = 0;
+						win_6_7.currentTime = 0;
+						lose_6_7.currentTime = 0;
+						dd.currentTime = 0;
+						dd_fail.currentTime = 0;
+						dd_answer.currentTime = 0;
+						phone.currentTime = 0;
+						audience.currentTime = 0;
+						
+						letsplay1_5.pause();
+						celebrity.pause();
+						final_answer.pause();
+						win_6_7.pause();
+						lose_6_7.pause();
+						dd.pause();
+						dd_fail.pause();
+						dd_answer.pause();
+						phone.pause();
+						audience.pause();
+						
+						$('#a_hud').attr("src", "hud/hud_default.png");
+						$('#b_hud').attr("src", "hud/hud_default.png");
+						$('#c_hud').attr("src", "hud/hud_default.png");
+						$('#d_hud').attr("src", "hud/hud_default.png");
+						$('#phone_counter').text("30");
+						$('#a_num').text("");
+						$('#b_num').text("");
+						$('#c_num').text("");
+						$('#d_num').text("");
+						
+						$('#question_text').animate({"opacity": "hide"},0);
+						$('.answer').animate({"opacity": "hide"},0);
+						$('#life_dd_using').animate({"opacity": "hide"},0);	
+						$('#audience_board').animate({"opacity": "hide"},0);
+						$('#life_dd').animate({"opacity": "show"},0);
+						$('#life_phone').animate({"opacity": "show"},0);
+						$('#life_audience').animate({"opacity": "show"},0);
+						
+						/*starts the game animation*/
+						letsplay1_5.play();
+						$('#start').animate({"opacity": "hide"},200);
+						$('#question_text').delay(5000).animate({"opacity": "show"},500);
+						setTimeout(function(){letsplay1_5.pause();}, 10200)
+						setTimeout(function(){letsplay1_5.currentTime = 0;}, 10201)
+						setTimeout(function(){celebrity.play();}, 10000)
+						$('.answer').delay(10000).animate({"opacity": "show"},500);
+						setTimeout(function(){interact = true; interact_life = true;}, 10000)
+					});
+					
+					/*function if the A answer was clicked on*/
+					$('#a_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#a_hud').attr("src", "hud/hud_answer.png");
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
+							chosen = "a";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#a_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									dd_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+									$('#life_dd_using').animate({"opacity": "hide"},500);	
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#a_text').animate({"opacity": "hide"},1000);
+										$('#a_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+										
+									}
+									
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the B answer was clicked on*/
+					$('#b_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#b_hud').attr("src", "hud/hud_answer.png");
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
+							chosen = "b";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#b_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									dd_answer.pause();
+									final_answer.currentTime = 0;
+									$('#life_dd_using').animate({"opacity": "hide"},500);	
+									win_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#b_text').animate({"opacity": "hide"},1000);
+										$('#b_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the C answer was clicked on*/
+					$('#c_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#c_hud').attr("src", "hud/hud_answer.png");
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
+							chosen = "c";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#c_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									dd_answer.pause();
+									final_answer.currentTime = 0;
+									$('#life_dd_using').animate({"opacity": "hide"},500);
+									win_6_7.play();
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#c_text').animate({"opacity": "hide"},1000);
+										$('#c_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*function if the D answer was clicked on*/
+					$('#d_text').on('click',function(){
+						if(interact == true){
+							interact = false;
+							$('#d_hud').attr("src", "hud/hud_answer.png");
+							
+							if(doubledip == false){
+								celebrity.pause();
+								final_answer.play();
+							}else{
+								dd.pause();
+								dd_answer.play();
+							}
+							
+							chosen = "d";
+							setTimeout(function(){
+							
+								if(correct == chosen){
+									$('#d_hud').attr("src", "hud/hud_good.png");
+									final_answer.pause();
+									dd_answer.pause();
+									final_answer.currentTime = 0;
+									win_6_7.play();
+									$('#life_dd_using').animate({"opacity": "hide"},500);
+									$('#start').animate({"opacity": "show"},200);
+								}else{
+									
+									if(doubledip == false){
+										/*if double dip is not active*/
+										$('#b_hud').attr("src", "hud/hud_good.png");
+										final_answer.pause();
+										final_answer.currentTime = 0;
+										lose_6_7.play();
+										$('#start').animate({"opacity": "show"},200);
+									}else{
+										/*if double dip is active*/
+										$('#d_text').animate({"opacity": "hide"},1000);
+										$('#d_hud').attr("src", "hud/hud_default.png");
+										dd_answer.pause();
+										dd_fail.play();
+										setTimeout(function(){
+											dd_fail.pause(); 
+											celebrity.play();
+											doubledip = false;
+											interact = true;
+											$('#life_dd_using').animate({"opacity": "hide"},500);
+										}, 3000)
+									}
+									
+								}
+							
+							}, 3000)
+						}
+					});
+					
+					/*Lifeline functions*/
+					/*Double Dip*/
+					$('#life_dd').on('click',function(){
+						if(interact == true && interact_life == true){
+							celebrity.pause();
+							dd.play();
+							
+							$('#life_dd').animate({"opacity": "hide"},200);
+							$('#life_dd_using').animate({"opacity": "show"},200);
+							doubledip = true;
+							interact_life = false;
+						}
+					});
+					
+					/*Phone a Friend*/
+					$('#life_phone').on('click',function(){
+						if(interact == true && interact_life == true){
+							var call_time = 29;
+							var call_time_text = "";
+							celebrity.pause();
+							phone.play();
+							interact = false;
+							$('#life_phone').animate({"opacity": "hide"},200);
+							$('#life_phone_using').animate({"opacity": "show"},200);
+							$('#phone_counter').animate({"opacity": "show"},200);
+							var ticking = setInterval(function(){
+									call_time_text = call_time.toString();
+									$('#phone_counter').text(call_time_text);
+									call_time--;
+									if(call_time == -1){
+										cut_call();
+									}
+							}, 1000);
+						}
+						
+						/*manual phone interruption*/
+						$('#life_phone_using').on('click',function(){
+							cut_call();
+						});
+						$('#phone_counter').on('click',function(){
+							cut_call();
+						});
+						
+						/*terminate phone a friend*/
+						function cut_call(){
+							clearInterval(ticking);
+							$('#phone_counter').text(correct);
+							phone.currentTime = 30;
+							setTimeout(function(){
+								phone.pause();
+								$('#life_phone_using').animate({"opacity": "hide"},200);
+								$('#phone_counter').animate({"opacity": "hide"},200);
+								celebrity.play();
+								interact = true;
+							}, 3000)
+						}
+					});
+					
+					/*audience*/
+					$('#life_audience').on('click',function(){
+						if(interact == true && interact_life == true){
+							var a = 0;
+							var b = 0;
+							var c = 0;
+							var d = 0;
+							var remains = 100;
+							interact = false;
+							
+							celebrity.pause();
+							$('#a_chart').height(0);
+							$('#b_chart').height(0);
+							$('#c_chart').height(0);
+							$('#d_chart').height(0);
+							$('#life_audience').animate({"opacity": "hide"},200);
+							$('#audience_board').animate({"opacity": "show"},200);
+							audience.play();
+							
+							function randomize(min, max) {
+								return Math.floor(Math.random() * (max - min + 1) ) + min;
+							}
+							/*check the correct answer and then randomize the numbers*/
+							/*correct answer has a higher chance to get a high result*/
+							if(correct == "a"){
+								a = randomize(30, 60);
+								remains = remains - a;
+								b = randomize(0, remains);
+								remains = remains - b;
+								c = randomize(0, remains);
+								remains = remains - c;
+								d = remains;
+							}
+							if(correct == "b"){
+								b = randomize(30, 60);
+								remains = remains - b;
+								c = randomize(0, remains);
+								remains = remains - c;
+								a = randomize(0, remains);
+								remains = remains - a;
+								d = remains;
+							}
+							if(correct == "c"){
+								c = randomize(30, 60);
+								remains = remains - c;
+								d = randomize(0, remains);
+								remains = remains - d;
+								a = randomize(0, remains);
+								remains = remains - a;
+								b = remains;
+							}
+							if(correct == "d"){
+								d = randomize(30, 60);
+								remains = remains - d;
+								b = randomize(0, remains);
+								remains = remains - b;
+								c = randomize(0, remains);
+								remains = remains - c;
+								a = remains;
+							}
+							
+							setTimeout(function(){audience.currentTime = 8.2;}, 2000);
+							/*play animation*/
+							setTimeout(function(){
+							
+								var a_mini = a/150;
+								var b_mini = b/150;
+								var c_mini = c/150;
+								var d_mini = d/150;
+								
+								var a_bar = 0;
+								var b_bar = 0;
+								var c_bar = 0;
+								var d_bar = 0;
+								
+								var a_move = setInterval(function(){
+
+									a_bar = a_bar+a_mini;
+									$('#a_chart').height(a_bar*3);
+									$('#a_chart').css('top', 300 - (a_bar*3) + "px");
+									
+									if(a_bar >= a){
+										clearInterval(a_move);
+									}
+									
+								}, 10);
+								
+								var b_move = setInterval(function(){
+
+									b_bar = b_bar+b_mini;
+									$('#b_chart').height(b_bar*3);
+									$('#b_chart').css('top', 300 - (b_bar*3) + "px");
+									
+									if(b_bar >= b){
+										clearInterval(b_move);
+									}
+									
+								}, 10);
+								
+								var c_move = setInterval(function(){
+
+									c_bar = c_bar+c_mini;
+									$('#c_chart').height(c_bar*3);
+									$('#c_chart').css('top', 300 - (c_bar*3) + "px");
+									
+									if(c_bar >= c){
+										clearInterval(c_move);
+									}
+									
+								}, 10);
+								
+								var d_move = setInterval(function(){
+
+									d_bar = d_bar+d_mini;
+									$('#d_chart').height(d_bar*3);
+									$('#d_chart').css('top', 300 - (d_bar*3) + "px");
+									
+									if(d_bar >= d){
+										clearInterval(d_move);
+									}
+									
+								}, 10);
+									
+							}, 5500);
+							
+							/*show the percentages*/
+							setTimeout(function(){
+								$('#a_num').text(a);
+								$('#b_num').text(b);
+								$('#c_num').text(c);
+								$('#d_num').text(d);
+							}, 7000);
+							/*give the control back to the player*/
+							setTimeout(function(){
+								interact = true;
+								$('#audience_board').animate({"opacity": "hide"},200);
+								celebrity.play();
+								audience.pause();
+							}, 10000);
+						}
+					});
+				}
+			});
+		
+		</script>
+	</head>
+
+	<body>
+		<div id="start">Start</div>
+		
+		<img id="question_hud" src="hud/hud_default.png" width="950px" height="150px">
+		<img id="a_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="b_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="c_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<img id="d_hud" src="hud/hud_default.png" width="500px" height="75px">
+		<div id="question_text">Which of the following people was the first president of the United States?</div>
+		<div id="a_text" class="answer">A: Thomas Jefferson</div>
+		<div id="b_text" class="answer">B: George Washington</div>
+		<div id="c_text" class="answer">C: John Tyler</div>
+		<div id="d_text" class="answer">D: Ronald Reagan</div>
+		
+		<img id="life_phone" class="lifeline" src="hud/lifeline_phone.png" width="100px" height="50px">
+		<img id="life_audience" class="lifeline" src="hud/lifeline_audience.png" width="100px" height="50px">
+		<img id="life_dd" class="lifeline" src="hud/lifeline_dd.png" width="100px" height="50px">
+		<img id="life_dd_using" src="hud/lifeline_dd.png" width="100px" height="50px">
+		<img id="life_phone_using" src="hud/lifeline_standard.png" width="200px" height="200px">
+		<div id="phone_counter">30</div>
+		
+		<div id="audience_board">
+			<div id="a_chart"></div>
+			<div id="b_chart"></div>
+			<div id="c_chart"></div>
+			<div id="d_chart"></div>
+			<div id="audience_a">A</div>
+			<div id="audience_b">B</div>
+			<div id="audience_c">C</div>
+			<div id="audience_d">D</div>
+			<div id="a_num">100%</div>
+			<div id="b_num">100%</div>
+			<div id="c_num">100%</div>
+			<div id="d_num">100%</div>
+		</div>
+		
+		<audio id="letsplay1_5" src="music/letsplay1_5.mp3"></audio>
+		<audio loop id="celebrity" src="music/q_celebrity.mp3"></audio>
+		<audio id="final_answer" src="music/final_answer.mp3"></audio>
+		<audio id="win_6_7" src="music/win_6_7.mp3"></audio>
+		<audio id="lose_6_7" src="music/lose_6_7.mp3"></audio>
+		<audio id="dd" src="music/dd.mp3"></audio>
+		<audio id="dd_fail" src="music/dd_fail.mp3"></audio>
+		<audio id="dd_answer" src="music/dd_answer.mp3"></audio>
+		<audio id="phone" src="music/Phone.mp3"></audio>
+		<audio id="audience" src="music/Audience.mp3"></audio>
+	</body>
+
+</html>
